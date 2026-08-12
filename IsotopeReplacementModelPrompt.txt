@@ -1,0 +1,143 @@
+Create a Python script that models the replacement of metamict zircon (MZ) by crystalline zircon (CZ) during an isotope-doping experiment using mass-balance principles.
+Initial Conditions
+Isotopic compositions (‰, delta notation)
+Oxygen isotopes (δ¹⁸O)
+Plain Text
+1 δ18O_H2O = -50.55
+2 δ18O_Si = -19.25
+3 δ18O_CZ = -35.70
+4 δ18O_MZ = 0.45
+Show more lines
+Silicon isotopes (δ29Si)
+Plain Text
+1 δ29Si_FL = δ29Si_Si = δ29Si_CZ = 1.95e6
+2 δ29Si_MZ = 1.18
+Show more lines
+Initial masses (mg)
+Plain Text
+1 m0_MZ = 35.0
+2 m0_CZ = 0.0
+3 m0_H2O = 120.0
+4 m0_29Si = 1.7
+Show more lines
+The initial fluid (FL) consists of H₂O + added ^29Si tracer.
+Geometry
+Assume the starting metamict zircon is a cube.
+Using:
+Plain Text
+1 density_MZ = 4.0 g cm⁻³
+Show more lines
+calculate:
+Initial cube volume.
+Cube edge length.
+Distance from the cube edge to the reaction front during replacement.
+Convert all spatial coordinates to microns (µm).
+Replacement Model
+Simulate progressive replacement of MZ by CZ.
+Define reaction progress:
+Plain Text
+1 eps = mCZ / (mCZ + mMZ)
+Show more lines
+where:
+Plain Text
+1 0 ≤ eps ≤ 1
+Show more lines
+Use:
+Plain Text
+1 Δeps = 0.01
+Show more lines
+(or finer, if needed for smooth curves).
+At each timestep:
+Remove a mass increment of MZ.
+Convert the same mass increment to CZ.
+Update masses of:
+CZ
+MZ
+Fluid
+Assume:
+Heterogeneous replacement.
+Newly formed CZ is physically segregated from fluid.
+No re-equilibration (no back reaction).
+No isotopic fractionation.
+Perfect mass conservation.
+Stoichiometric replacement of MZ by CZ.
+Fluid is perfectly mixed at all times.
+Isotope Mass Balance
+Track both isotope systems independently:
+Oxygen
+Maintain the evolving average δ¹⁸O of:
+Fluid (FL)
+Bulk CZ
+Store the δ¹⁸O of each individual CZ increment precipitated during every timestep.
+Silicon
+Maintain the evolving average δ²⁹Si of:
+Fluid (FL)
+Bulk CZ
+Store the δ²⁹Si of each individual CZ increment precipitated during every timestep.
+Because no fractionation occurs, the isotope composition of a newly precipitated CZ increment equals the fluid composition at the moment of precipitation.
+Spatial Mapping
+Relate each CZ increment to a position within the cube.
+Assume replacement proceeds inward uniformly from all cube faces toward the center.
+For each timestep:
+Compute the remaining MZ volume.
+Determine the position of the reaction front.
+Calculate:
+Plain Text
+1 distance_from_edge (µm)
+Show more lines
+for the corresponding CZ increment.
+Associate each precipitated CZ increment with:
+distance_from_edge
+δ18O_CZ_increment
+δ29Si_CZ_increment
+Required Outputs
+Plot 1
+Average fluid and bulk CZ oxygen compositions:
+Plain Text
+1 δ18O_FL vs eps
+2 δ18O_CZ_bulk vs eps
+Show more lines
+Plot 2
+Average fluid and bulk CZ silicon compositions:
+Plain Text
+1 δ29Si_FL vs eps
+2 δ29Si_CZ_bulk vs eps
+Show more lines
+Plot 3
+Spatial oxygen profile:
+Plain Text
+1 δ18O_CZ_increment vs distance_from_edge (µm)
+Show more lines
+Plot 4
+Spatial silicon profile:
+Plain Text
+1 δ29Si_CZ_increment vs distance_from_edge (µm)
+Show more lines
+All plots should include:
+axis labels
+units
+legends
+grid
+publication-quality formatting
+Data Export
+Save CSV files containing the data used for each plot.
+Required CSV files:
+Plain Text
+1 oxygen_vs_eps.csv
+2 silicon_vs_eps.csv
+3 oxygen_spatial_profile.csv
+4 silicon_spatial_profile.csv
+Show more lines
+Each CSV should contain descriptive column headers.
+Code Requirements
+Use NumPy, Pandas, and Matplotlib.
+Organize calculations into reusable functions.
+Include comments explaining the mass-balance calculations.
+Verify mass conservation at every timestep.
+Generate plots automatically when the script is run.
+Print summary statistics:
+initial cube size
+final masses
+isotope compositions at eps = 1
+total mass balance error
+The script should be fully executable as a standalone Python program.

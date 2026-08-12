@@ -1,0 +1,22 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python -c \"import numpy, pandas, matplotlib; print\\('ok', numpy.__version__, pandas.__version__, matplotlib.__version__\\)\")",
+      "Bash(MPLBACKEND=Agg python mz_replacement_model.py)",
+      "PowerShell($env:MPLBACKEND='Agg'; python \"mz_replacement_model.py\")",
+      "PowerShell(Get-Command python)",
+      "Bash(python -c \"print\\('hello'\\)\")",
+      "Bash(where.exe python *)",
+      "Read(//c/Users/ayersj/AppData/Local/Programs/**)",
+      "Bash(py --version)",
+      "Bash(where.exe py *)",
+      "Bash(export MPLBACKEND=Agg)",
+      "Bash(py \"mz_replacement_model.py\")",
+      "Bash(py \"mz_replacement_model_homogeneous.py\")",
+      "Read(//tmp/**)",
+      "Bash(python3 -)",
+      "Bash(echo \"exit1=$?\")",
+      "Bash(echo \"exit2=$?\")"
+    ]
+  }
+}
