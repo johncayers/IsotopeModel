@@ -373,7 +373,7 @@ def make_snapshot_plots(snapshots: pd.DataFrame, output_dir: str, eps_snapshots:
     os.makedirs(output_dir, exist_ok=True)
     colors = plt.cm.viridis(np.linspace(0.15, 0.9, len(eps_snapshots)))
 
-    # Oxygen snapshots
+    # Plot5 Oxygen snapshots
     fig, ax = plt.subplots(figsize=(7.5, 5.2))
     for eps_snap, color in zip(eps_snapshots, colors):
         seg = snapshots[snapshots["eps_snapshot"] == eps_snap]
@@ -381,13 +381,14 @@ def make_snapshot_plots(snapshots: pd.DataFrame, output_dir: str, eps_snapshots:
                 label=fr"$\varepsilon$ = {eps_snap:.1f}")
     ax.set_xlabel(r"Distance from original crystal edge, $\mu m$")
     ax.set_ylabel(r"$\delta^{18}O_{CZ}$ (‰, VSMOW)")
-    ax.set_title("Spatial oxygen isotope profile at intermediate reaction progress\n(homogeneous re-equilibration model)")
+    ax.set_ylim(-50, -36)
+    ax.set_yticks(np.arange(-50, -35, 2))
     ax.legend(loc="best", frameon=True, title="Reaction progress")
     _style_axes(ax)
     fig.tight_layout()
     fig.savefig(os.path.join(output_dir, "plot5_oxygen_spatial_profile_snapshots_homogeneous.png"), bbox_inches="tight")
 
-    # Silicon snapshots
+    # Plot6 Silicon snapshots
     fig, ax = plt.subplots(figsize=(7.5, 5.2))
     for eps_snap, color in zip(eps_snapshots, colors):
         seg = snapshots[snapshots["eps_snapshot"] == eps_snap]
@@ -395,7 +396,6 @@ def make_snapshot_plots(snapshots: pd.DataFrame, output_dir: str, eps_snapshots:
                 label=fr"$\varepsilon$ = {eps_snap:.1f}")
     ax.set_xlabel(r"Distance from original crystal edge, $\mu m$")
     ax.set_ylabel(r"$\delta^{29}Si_{CZ}$ (‰)")
-    ax.set_title("Spatial silicon isotope profile at intermediate reaction progress\n(homogeneous re-equilibration model)")
     ax.legend(loc="best", frameon=True, title="Reaction progress")
     _style_axes(ax)
     fig.tight_layout()
@@ -454,6 +454,8 @@ def make_plots(df: pd.DataFrame, output_dir: str) -> None:
     ax.set_xlabel(r"Distance from original crystal edge, $\mu m$")
     ax.set_ylabel(r"$\delta^{18}O_{CZ}$ (‰, VSMOW)")
     ax.set_title("Spatial oxygen isotope profile (homogeneous re-equilibration model)")
+    ax.set_ylim(-50, -36)
+    ax.set_yticks(np.arange(-50, -35, 2))
     ax.legend(loc="best", frameon=True)
     _style_axes(ax)
     fig.tight_layout()

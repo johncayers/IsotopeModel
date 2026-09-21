@@ -260,28 +260,28 @@ def export_csvs(df: pd.DataFrame, output_dir: str) -> None:
         "delta18O_FL": "delta18O_fluid_permil",
         "delta18O_CZ_bulk": "delta18O_bulk_CZ_permil",
     })
-    oxygen_vs_eps.to_csv(os.path.join(output_dir, "oxygen_vs_eps.csv"), index=False)
+    oxygen_vs_eps.to_csv(os.path.join(output_dir, "oxygen_vs_eps_heterogeneous.csv"), index=False)
 
     silicon_vs_eps = df[["eps", "delta29Si_FL", "delta29Si_CZ_bulk"]].rename(columns={
         "eps": "reaction_progress_eps",
         "delta29Si_FL": "delta29Si_fluid_permil",
         "delta29Si_CZ_bulk": "delta29Si_bulk_CZ_permil",
     })
-    silicon_vs_eps.to_csv(os.path.join(output_dir, "silicon_vs_eps.csv"), index=False)
+    silicon_vs_eps.to_csv(os.path.join(output_dir, "silicon_vs_eps_heterogeneous.csv"), index=False)
 
     oxygen_spatial = df[["eps", "distance_from_edge_um", "delta18O_CZ_increment"]].dropna().rename(columns={
         "eps": "reaction_progress_eps",
         "distance_from_edge_um": "distance_from_edge_um",
         "delta18O_CZ_increment": "delta18O_CZ_increment_permil",
     })
-    oxygen_spatial.to_csv(os.path.join(output_dir, "oxygen_spatial_profile.csv"), index=False)
+    oxygen_spatial.to_csv(os.path.join(output_dir, "oxygen_spatial_profile_heterogeneous.csv"), index=False)
 
     silicon_spatial = df[["eps", "distance_from_edge_um", "delta29Si_CZ_increment"]].dropna().rename(columns={
         "eps": "reaction_progress_eps",
         "distance_from_edge_um": "distance_from_edge_um",
         "delta29Si_CZ_increment": "delta29Si_CZ_increment_permil",
     })
-    silicon_spatial.to_csv(os.path.join(output_dir, "silicon_spatial_profile.csv"), index=False)
+    silicon_spatial.to_csv(os.path.join(output_dir, "silicon_spatial_profile_heterogeneous.csv"), index=False)
 
 
 # ---------------------------------------------------------------------------
@@ -317,7 +317,7 @@ def make_plots(df: pd.DataFrame, output_dir: str) -> None:
     ax.legend(loc="best", frameon=True)
     _style_axes(ax)
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, "plot1_oxygen_vs_eps.png"), bbox_inches="tight")
+    fig.savefig(os.path.join(output_dir, "plot1_oxygen_vs_eps_heterogeneous.png"), bbox_inches="tight")
 
     # Plot 2: silicon vs eps
     fig, ax = plt.subplots(figsize=(6.5, 5))
@@ -330,7 +330,7 @@ def make_plots(df: pd.DataFrame, output_dir: str) -> None:
     ax.legend(loc="best", frameon=True)
     _style_axes(ax)
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, "plot2_silicon_vs_eps.png"), bbox_inches="tight")
+    fig.savefig(os.path.join(output_dir, "plot2_silicon_vs_eps_heterogeneous.png"), bbox_inches="tight")
 
     # Plot 3: spatial oxygen profile
     spatial = df.dropna(subset=["delta18O_CZ_increment"])
@@ -338,12 +338,24 @@ def make_plots(df: pd.DataFrame, output_dir: str) -> None:
     ax.plot(spatial["distance_from_edge_um"], spatial["delta18O_CZ_increment"],
             color="#2ca02c", lw=1.5, marker="o", ms=2.5, label=r"CZ increment $\delta^{18}O$")
     ax.set_xlabel(r"Distance from original crystal edge, $\mu m$")
-    ax.set_ylabel(r"$\delta^{18}O_{CZ}$ increment (‰, VSMOW)")
-    ax.set_title("Spatial oxygen isotope profile of replacement CZ")
+    ax.set_ylabel("δ 18O (‰, VSMOW)")
     ax.legend(loc="best", frameon=True)
     _style_axes(ax)
+
+    # Callouts marking reaction progress (eps = 0.2, 0.4, 0.6, 0.8, 1.0)
+    for eps_callout in (0.2, 0.4, 0.6, 0.8, 1.0):
+        idx = (spatial["eps"] - eps_callout).abs().idxmin()
+        point = spatial.loc[idx]
+        ax.annotate(
+            fr"$\varepsilon$ = {eps_callout:.1f}",
+            xy=(point["distance_from_edge_um"], point["delta18O_CZ_increment"]),
+            xytext=(0, 12), textcoords="offset points",
+            ha="center", fontsize=9,
+            arrowprops=dict(arrowstyle="-", color="black", lw=0.8),
+        )
+
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, "plot3_oxygen_spatial_profile.png"), bbox_inches="tight")
+    fig.savefig(os.path.join(output_dir, "plot3_oxygen_spatial_profile_heterogeneous.png"), bbox_inches="tight")
 
     # Plot 4: spatial silicon profile
     fig, ax = plt.subplots(figsize=(6.5, 5))
@@ -351,11 +363,23 @@ def make_plots(df: pd.DataFrame, output_dir: str) -> None:
             color="#9467bd", lw=1.5, marker="o", ms=2.5, label=r"CZ increment $\delta^{29}Si$")
     ax.set_xlabel(r"Distance from original crystal edge, $\mu m$")
     ax.set_ylabel(r"$\delta^{29}Si_{CZ}$ increment (‰)")
-    ax.set_title("Spatial silicon isotope profile of replacement CZ")
     ax.legend(loc="best", frameon=True)
     _style_axes(ax)
+
+    # Callouts marking reaction progress (eps = 0.2, 0.4, 0.6, 0.8, 1.0)
+    for eps_callout in (0.2, 0.4, 0.6, 0.8, 1.0):
+        idx = (spatial["eps"] - eps_callout).abs().idxmin()
+        point = spatial.loc[idx]
+        ax.annotate(
+            fr"$\varepsilon$ = {eps_callout:.1f}",
+            xy=(point["distance_from_edge_um"], point["delta29Si_CZ_increment"]),
+            xytext=(0, 12), textcoords="offset points",
+            ha="center", fontsize=9,
+            arrowprops=dict(arrowstyle="-", color="black", lw=0.8),
+        )
+
     fig.tight_layout()
-    fig.savefig(os.path.join(output_dir, "plot4_silicon_spatial_profile.png"), bbox_inches="tight")
+    fig.savefig(os.path.join(output_dir, "plot4_silicon_spatial_profile_heterogeneous.png"), bbox_inches="tight")
 
     plt.show()
 
