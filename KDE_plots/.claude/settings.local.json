@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(python kde_plot.py)",
+      "Bash(python -m pip install --quiet numpy pandas matplotlib)",
+      "Bash(python -c ' *)",
+      "Bash(python -m pip install --quiet openpyxl)",
+      "Bash(python kde_plot_si.py)",
+      "Bash(python kde_plot_o.py)",
+      "Bash(python kde_plot_si_by_sample.py)",
+      "Bash(python kde_plot_o_by_sample.py)"
+    ]
+  }
+}
