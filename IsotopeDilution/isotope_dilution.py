@@ -21,11 +21,13 @@ GFW_29SIO2 = 61.0            # g/mol
 GFW_ZIRCON = 183.31          # g/mol ZrSiO4 (91.224 + 28.086 + 4*15.999)
 KG_H2O = 120e-6
 
-# --- experiments: id, duration (d), d29Si_hz (permil), w_29SiO2 (g) ---------
+# --- experiments: id, duration (d), d29Si_hz (permil), w_29SiO2 (g) --------- d29Si_hz = d29Si_hz
 experiments = [
-    (14, 3, 6380, 1.768e-3),
-    (16, 7, 17891, 2.073e-3),
-    (15, 19, 13253, 1.695e-3),
+    (14, 3, 41256.4, 1.768e-3),
+    (16, 7, 46189.2, 2.073e-3),
+    (15, 19, 15195.9, 1.695e-3),
+    (17, 1, 0.20, 1.3e-3),
+    (18, 1, 3, 1.5193e-3),
 ]
 
 
